@@ -8,6 +8,10 @@ module BuildPack
     REGEX = /.*(mysql-client-8\.0_8\.0\.18-0ubuntu\d_amd64.deb).*/
 
     class << self
+      def download_latest_lib_to(path)
+        File.open(path, 'w+').write(Net::HTTP.get(URI.parse("#{MYSQL_BASE_URL}libmysqlclient21_8.0.18-0ubuntu4_i386.deb")))
+      end
+      
       def download_latest_client_to(path)
         Logger.log_header("Downloading MySQL Client package")
 
