@@ -7,7 +7,9 @@ module BuildPack
       def install(build_dir, cache_dir)
         init_paths(build_dir, cache_dir)
         make_dirs
+        Downloader.download_latest_lib_to(@lib_mysql_pkg) unless cached?
         Downloader.download_latest_client_to(@mysql_pkg) unless cached?
+
         if client_exists?
           install_client and cleanup
         else
@@ -23,6 +25,7 @@ module BuildPack
         @mysql_path = "#{@tmp_path}/mysql"
         @mysql_binaries = "#{@mysql_path}/usr/bin"
         @mysql_pkg = "#{cache_dir}/mysql.deb"
+        @lib_mysql_pkg = "#{cache_dir}/lib_mysql.deb"
       end
 
       def make_dirs
@@ -43,6 +46,7 @@ module BuildPack
       end
 
       def install_client
+        run_command_with_message(command: "dpkg -x #{@lib_mysql_pkg} #{@mysql_path}", message: "Installing MySQL Lib")
         run_command_with_message(command: "dpkg -x #{@mysql_pkg} #{@mysql_path}", message: "Installing MySQL Client")
         fix_perms_and_mv_binaries
       end
