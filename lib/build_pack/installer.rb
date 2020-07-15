@@ -7,7 +7,7 @@ module BuildPack
       def install(build_dir, cache_dir)
         init_paths(build_dir, cache_dir)
         make_dirs
-        # Downloader.download_latest_lib_to(@lib_mysql_pkg) unless cached?
+        Downloader.download_latest_lib_to(@lib_mysql_pkg) unless cached?
         Downloader.download_latest_client_to(@mysql_pkg) unless cached?
 
         if client_exists?
@@ -46,7 +46,7 @@ module BuildPack
       end
 
       def install_client
-        # run_command_with_message(command: "dpkg -x #{@lib_mysql_pkg} #{@mysql_path}", message: "Installing MySQL Lib")
+        run_command_with_message(command: "dpkg -x #{@lib_mysql_pkg} #{@mysql_path}", message: "Installing MySQL Lib")
         run_command_with_message(command: "dpkg -x #{@mysql_pkg} #{@mysql_path}", message: "Installing MySQL Client")
         fix_perms_and_mv_binaries
       end
@@ -60,7 +60,7 @@ module BuildPack
 
       def fix_perms_and_mv_binaries
         binaries = Dir.glob("#{@mysql_binaries}/*")
-        # FileUtils.chmod("u=wrx", binaries)
+
         FileUtils.mv(binaries, @bin_path)
       end
 
