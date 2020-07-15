@@ -60,7 +60,7 @@ module BuildPack
 
       def fix_perms_and_mv_binaries
         binaries = Dir.glob("#{@mysql_binaries}/*")
-        FileUtils.chmod("u=wrx", binaries)
+
         FileUtils.mv(binaries, @bin_path)
       end
 
